@@ -308,10 +308,10 @@ function sendToWebhook(type, records, submitter){
     try{
         fetch(WEBHOOK_URL,{
             method:'POST',
-            headers:{'Content-Type':'application/json'},
+            headers:{'Content-Type':'text/plain'},
             body:JSON.stringify({type, records, submitter, timestamp:new Date().toISOString()})
-        }).then(r=>r.json()).then(d=>{
-            if(d.success) console.log('[n8n] 전송 성공:', d.message);
+        }).then(r=>{
+            console.log('[n8n] 전송 완료');
         }).catch(e=>console.warn('[n8n] 전송 실패 (로컬 저장은 완료):', e));
     }catch(e){}
 }
