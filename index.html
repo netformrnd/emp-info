@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NETFORM R&D - 직원 정보 제출</title>
+<style>
+:root{--bg:#F1F5F9;--surface:#fff;--border:#e2e8f0;--accent:#3b82f6;--accent-dim:rgba(59,130,246,.08);--text:#0F172A;--sub:#64748b;--dim:#94a3b8;--green:#15803d;--green-dim:rgba(21,128,61,.08);--red:#dc2626;--radius:8px;--orange:#ea580c;--orange-dim:rgba(234,88,12,.08);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Pretendard','Segoe UI','Malgun Gothic',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;}
+.hd{background:linear-gradient(135deg,#0F172A,#1E293B);padding:0 28px;height:52px;display:flex;align-items:center;justify-content:space-between;}
+.hd-logo{font-size:15px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px;}
+.hd-logo b{color:#667eea;font-size:16px;}
+.wrap{max-width:820px;margin:0 auto;padding:28px 20px;}
+
+/* ===== 공지 ===== */
+.notice{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px 28px 24px;margin-bottom:24px;border-left:5px solid var(--accent);}
+.notice h2{font-size:21px;margin-bottom:18px;color:var(--text);letter-spacing:-.3px;display:flex;align-items:center;gap:10px;}
+.notice-badge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;padding:4px 14px;border-radius:8px;font-size:13px;font-weight:700;letter-spacing:.3px;box-shadow:0 2px 6px rgba(59,130,246,.25);}
+.notice h2 .notice-title-text{font-weight:800;}
+.notice-intro{font-size:15px;color:var(--text);line-height:1.7;margin-bottom:18px;}
+
+.notice-section{margin-bottom:18px;}
+.notice-section-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.notice-section-title .num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--accent);color:#fff;border-radius:50%;font-size:12px;font-weight:700;flex-shrink:0;}
+.notice-desc{font-size:14px;color:var(--sub);line-height:1.75;padding-left:30px;}
+.notice-desc b{color:var(--text);}
+
+.notice-guide{background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;padding:16px 20px;margin:14px 0 18px 0;font-size:14px;color:var(--text);line-height:1.8;}
+.notice-guide .guide-title{font-weight:700;font-size:14.5px;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+.notice-guide .guide-ex{background:#fff;border:1px solid #dbeafe;border-radius:6px;padding:8px 14px;margin-top:8px;font-size:13.5px;color:var(--sub);line-height:1.6;}
+.notice-guide .guide-ex b{color:var(--accent);}
+.notice-task-rule{background:#fef9ee;border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin:10px 0 0 0;font-size:14px;color:var(--text);line-height:1.75;}
+.notice-task-rule b{color:var(--orange);}
+
+.notice-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);}
+.notice-contact{font-size:13px;color:var(--dim);}
+.deadline{display:inline-block;background:#fef3c7;color:#92400e;padding:4px 14px;border-radius:6px;font-weight:700;font-size:13px;}
+
+/* ===== 탭 ===== */
+.tabs{display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:20px;}
+.tab{flex:1;padding:13px;text-align:center;font-size:14.5px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--sub);transition:.15s;}
+.tab:not(:last-child){border-right:1px solid var(--border);}
+.tab.on{background:var(--accent);color:#fff;font-weight:600;}
+
+/* ===== 카드 ===== */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:16px;}
+.card-t{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.card-t svg{width:20px;height:20px;color:var(--accent);}
+
+/* 선택 */
+.sel-wrap{margin-bottom:16px;}
+.sel-wrap label{font-size:13px;font-weight:600;color:var(--sub);display:block;margin-bottom:6px;}
+.sel-wrap select,.sel-wrap input[type="text"]{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;outline:none;background:var(--surface);color:var(--text);}
+.sel-wrap select:focus,.sel-wrap input:focus{border-color:var(--accent);}
+
+/* 팀원 리스트 */
+.member{border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;background:#fafbfc;}
+.member.is-lead{border-color:var(--accent);background:var(--accent-dim);}
+.member-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.member-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#667eea,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;flex-shrink:0;}
+.member-info{flex:1;}
+.member-nm{font-size:14px;font-weight:700;}
+.member-pos{font-size:11px;color:var(--sub);}
+.member-badge{font-size:10px;font-weight:600;color:var(--accent);background:var(--accent-dim);padding:1px 8px;border-radius:10px;}
+.task-rows{display:flex;flex-direction:column;gap:5px;}
+.task-row{display:flex;align-items:center;gap:4px;}
+.task-input{padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;outline:none;flex:1;transition:.15s;}
+.task-input:focus{border-color:var(--accent);}
+.btn-del-task{width:24px;height:24px;border:none;background:none;color:var(--dim);font-size:16px;cursor:pointer;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.12s;}
+.btn-del-task:hover{color:var(--red);background:rgba(220,38,38,.08);}
+.btn-add-task{margin-top:4px;padding:3px 10px;background:none;border:1px dashed var(--border);border-radius:6px;color:var(--sub);font-size:11px;cursor:pointer;transition:.15s;}
+.btn-add-task:hover{border-color:var(--accent);color:var(--accent);}
+
+/* 사진 — 현황 */
+.stat-bar{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.stat-item{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:14px;font-weight:600;}
+.stat-total{background:var(--accent-dim);color:var(--accent);}
+.stat-done{background:var(--green-dim);color:var(--green);}
+.stat-remain{background:var(--orange-dim);color:var(--orange);}
+.stat-item .stat-n{font-size:18px;font-weight:800;}
+.progress-bar{height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-bottom:16px;}
+.progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--green),#22c55e);border-radius:3px;transition:width .4s ease;}
+
+/* 사진 — 사람 리스트 */
+.search-input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;outline:none;margin-bottom:12px;}
+.search-input:focus{border-color:var(--accent);}
+.person-list{max-height:400px;overflow-y:auto;}
+.person-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:6px;cursor:pointer;transition:.12s;}
+.person-item:hover{background:var(--accent-dim);border-color:var(--accent);}
+.person-item.on{background:var(--green-dim);border-color:var(--green);}
+.person-item .p-nm{font-weight:600;font-size:13px;}
+.person-item .p-info{font-size:11px;color:var(--sub);}
+.done-badge{display:inline-block;background:var(--green-dim);color:var(--green);padding:2px 10px;border-radius:10px;font-size:11px;font-weight:600;margin-left:auto;white-space:nowrap;}
+.undone-badge{display:inline-block;background:var(--orange-dim);color:var(--orange);padding:2px 10px;border-radius:10px;font-size:11px;font-weight:600;margin-left:auto;white-space:nowrap;}
+
+/* 사진 모달 */
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--surface);border-radius:14px;padding:32px;max-width:400px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2);position:relative;animation:modalIn .2s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--dim);line-height:1;}
+.modal-close:hover{color:var(--text);}
+.modal .photo-circle{width:140px;height:140px;border-radius:50%;border:3px dashed var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;transition:.15s;background:var(--bg);margin:0 auto 16px;}
+.modal .photo-circle:hover{border-color:var(--accent);}
+.modal .photo-circle.has-photo{border-style:solid;border-color:var(--green);}
+.modal .photo-circle img{width:100%;height:100%;object-fit:cover;}
+.modal .photo-circle svg{width:40px;height:40px;color:var(--dim);}
+.modal-name{font-size:18px;font-weight:700;margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--sub);margin-bottom:18px;}
+.modal-btns{display:flex;gap:8px;justify-content:center;margin-top:16px;}
+
+/* 관리자 영역 */
+.admin-area{margin-top:16px;padding:16px;background:#fafbfc;border:1px solid var(--border);border-radius:8px;}
+.admin-area summary{font-size:13px;font-weight:600;color:var(--sub);cursor:pointer;}
+.admin-area summary:hover{color:var(--accent);}
+.admin-lock{display:flex;align-items:center;gap:8px;margin-top:12px;}
+.admin-lock input{width:120px;padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;outline:none;text-align:center;letter-spacing:2px;}
+.admin-lock input:focus{border-color:var(--accent);}
+.admin-lock button{padding:7px 16px;font-size:12px;font-weight:600;}
+.admin-lock .lock-msg{font-size:12px;color:var(--red);margin-left:4px;}
+.admin-content{display:none;}
+.admin-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+
+/* 버튼 */
+.btn{padding:10px 22px;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);transition:.15s;}
+.btn:hover{background:var(--bg);}
+.btn-p{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn-p:hover{background:#2563eb;}
+.btn-g{background:var(--green);color:#fff;border-color:var(--green);}
+.btn-g:hover{background:#166534;}
+.btn-sm{padding:7px 16px;font-size:12px;}
+.btn-d{border-color:var(--red);color:var(--red);}.btn-d:hover{background:rgba(220,38,38,.06);}
+.actions{display:flex;gap:8px;justify-content:center;margin-top:20px;}
+
+.panel{display:none;}.panel.on{display:block;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:10px 24px;border-radius:8px;font-size:13px;opacity:0;transition:.3s;z-index:999;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{background:var(--green);}.toast.err{background:var(--red);}
+
+.empty-msg{text-align:center;padding:40px;color:var(--dim);font-size:14px;}
+.save-status{text-align:center;margin-top:12px;font-size:13px;color:var(--green);font-weight:600;display:none;}
+</style>
+</head>
+<body>
+
+<div class="hd"><div class="hd-logo"><b>NETFORM</b> R&D 직원 정보 제출</div></div>
+
+<div class="wrap">
+    <div class="notice">
+        <h2><span class="notice-badge">📢 공지</span> <span class="notice-title-text">직원 정보 시스템 — 자료 요청 안내</span></h2>
+        <p class="notice-intro">직원 정보 시스템 구축을 위해 아래 자료 제출을 요청드립니다.</p>
+
+        <div class="notice-section">
+            <div class="notice-section-title"><span class="num">1</span> 담당업무 기재 <span style="font-weight:400;color:var(--sub);font-size:13px;">(팀별 리드)</span></div>
+            <div class="notice-desc">
+                각 팀 리드께서 <b>본인 포함 팀원별 담당업무</b>를 작성하여 제출해 주시기 바랍니다.<br>
+                기재된 담당업무는 추후 <b>"이 업무는 누가 담당하는지"</b>를 빠르게 확인하기 위한<br>
+                <b>검색 정보</b>로 활용됩니다.
+            </div>
+            <div class="notice-guide">
+                <div class="guide-title">✏️ 기재 방법</div>
+                · <b>업무 키워드 + 채널명</b> 형식으로 간단히 기재해 주세요.<br>
+                · 동일 업무라도 <b>채널별 담당자가 다를 경우 구분</b>하여 기입해 주세요.
+                <div class="guide-ex">
+                    예) <b>생산관리</b>, <b>콘텐츠 기획(넷폼)</b>, <b>콘텐츠 기획(POUR공법)</b>
+                </div>
+            </div>
+            <div class="notice-task-rule">
+                📌 업무 <b>1, 2번은 주업무</b>로 등록됩니다. 가장 중요한 업무를 1, 2번에 기입해 주세요.<br>
+                · 3번부터는 부수 업무로 분류됩니다. 필요 시 <b>"업무 추가"</b> 버튼으로 추가할 수 있습니다.
+            </div>
+        </div>
+
+        <div class="notice-section">
+            <div class="notice-section-title"><span class="num">2</span> 증명사진 제출 <span style="font-weight:400;color:var(--sub);font-size:13px;">(개인별)</span></div>
+            <div class="notice-desc">
+                본인 이름을 선택 후 증명사진을 업로드해 주세요.<br>
+                업로드된 사진은 자동 저장되며, 별도 파일 전달 없이 관리자가 일괄 확인합니다.
+            </div>
+        </div>
+
+        <div class="notice-footer">
+            <span class="notice-contact">※ 문의: 경영관리팀 김유림 매니저</span>
+            <span class="deadline">📅 제출 기한: 2025년 2월 13일(목)</span>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab on" onclick="switchTab('task')">📋 담당업무 입력 (리드용)</div>
+        <div class="tab" onclick="switchTab('photo')">📷 증명사진 업로드 (개인)</div>
+    </div>
+
+    <!-- 모드1: 담당업무 -->
+    <div class="panel on" id="pTask">
+        <div class="card">
+            <div class="card-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> 리드 선택</div>
+            <div class="sel-wrap">
+                <label>본인 이름을 선택하세요</label>
+                <select id="leadSel" onchange="selectLead()">
+                    <option value="">-- 리드 선택 --</option>
+                </select>
+            </div>
+        </div>
+        <div id="teamArea"></div>
+        <div class="actions" id="taskActions" style="display:none">
+            <button class="btn btn-g" onclick="saveTaskData()">💾 저장</button>
+        </div>
+        <div class="save-status" id="taskSaveStatus"></div>
+        <div id="taskDlArea" style="display:none;margin-top:12px;">
+            <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+                <button class="btn btn-sm btn-p" onclick="dlTaskJSON()">📥 JSON 다운로드 <span style="font-size:10px;opacity:.7;">(HTML 임포트용)</span></button>
+                <button class="btn btn-sm" onclick="dlTaskCSV()">📊 엑셀(CSV) 다운로드 <span style="font-size:10px;opacity:.7;">(관리용)</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 모드2: 사진 -->
+    <div class="panel" id="pPhoto">
+        <div class="card">
+            <div class="card-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg> 증명사진 업로드</div>
+            <div id="photoStatArea"></div>
+            <input type="text" class="search-input" id="photoSearch" placeholder="이름으로 검색..." oninput="filterPhotoList()">
+            <div class="person-list" id="photoList"></div>
+            <!-- 관리자 영역 -->
+            <details class="admin-area">
+                <summary>🔧 관리자 도구</summary>
+                <div class="admin-lock" id="adminLock">
+                    <input type="password" id="adminPwInput" placeholder="비밀번호" maxlength="10" onkeydown="if(event.key==='Enter')unlockAdmin()">
+                    <button class="btn btn-sm btn-p" onclick="unlockAdmin()">🔓 확인</button>
+                    <span class="lock-msg" id="lockMsg"></span>
+                </div>
+                <div class="admin-content" id="adminContent">
+                <p style="font-size:12px;color:var(--sub);margin:10px 0 6px;line-height:1.6;">
+                    <b>📷 사진 데이터</b>
+                </p>
+                <div class="admin-btns">
+                    <button class="btn btn-sm btn-p" onclick="downloadAllPhotos()">📥 사진 JSON 다운로드 <span style="font-size:10px;opacity:.7;">(HTML 임포트용)</span></button>
+                    <button class="btn btn-sm" onclick="downloadPhotoStatus()">📊 사진 제출현황 CSV</button>
+                </div>
+                <p style="font-size:12px;color:var(--sub);margin:14px 0 6px;line-height:1.6;">
+                    <b>📋 담당업무 데이터 (전체 취합)</b>
+                </p>
+                <div class="admin-btns">
+                    <button class="btn btn-sm btn-p" onclick="downloadAllTasksJSON()">📥 업무 전체 JSON 다운로드 <span style="font-size:10px;opacity:.7;">(HTML 임포트용)</span></button>
+                    <button class="btn btn-sm" onclick="downloadAllTasksCSV()">📊 업무 전체 CSV 다운로드 <span style="font-size:10px;opacity:.7;">(엑셀용)</span></button>
+                </div>
+                <p style="font-size:12px;color:var(--sub);margin:14px 0 6px;line-height:1.6;">
+                    <b>📦 전체 통합 (업무 + 사진)</b>
+                </p>
+                <div class="admin-btns">
+                    <button class="btn btn-sm btn-g" onclick="downloadAllMergedJSON()">📥 통합 JSON 다운로드 <span style="font-size:10px;opacity:.7;">(직원정보공유.html → JSON 파일 병합)</span></button>
+                </div>
+                <div id="n8nAdminArea" style="display:none">
+                    <p style="font-size:12px;color:var(--sub);margin:14px 0 6px;line-height:1.6;">
+                        <b>☁️ n8n 서버 데이터</b> <span style="font-size:11px;color:var(--dim);">(모든 PC에서 취합된 데이터)</span>
+                    </p>
+                    <div class="admin-btns">
+                        <button class="btn btn-sm btn-p" onclick="fetchN8nData('status')">📊 제출 현황 확인</button>
+                        <button class="btn btn-sm btn-g" onclick="fetchN8nData('all')">📥 서버 통합 JSON 다운로드</button>
+                        <button class="btn btn-sm" onclick="fetchN8nData('tasks')">📋 서버 업무 JSON</button>
+                        <button class="btn btn-sm" onclick="fetchN8nData('photos')">📷 서버 사진 JSON</button>
+                    </div>
+                    <div id="n8nResult" style="margin-top:10px;"></div>
+                </div>
+                </div><!-- /admin-content -->
+            </details>
+        </div>
+    </div>
+</div>
+
+<!-- 사진 업로드 모달 -->
+<div class="modal-overlay" id="photoModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closePhotoModal()">&times;</button>
+        <div class="photo-circle" id="modalPreview" onclick="document.getElementById('photoFile').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+        <div class="modal-name" id="modalName"></div>
+        <div class="modal-sub" id="modalSub"></div>
+        <p style="font-size:12px;color:var(--dim);margin-bottom:6px;">증명사진 권장 (정면, 밝은 배경)<br>클릭하여 사진을 선택하세요</p>
+        <input type="file" id="photoFile" accept="image/*" style="display:none" onchange="handleUserPhoto(event)">
+        <div class="modal-btns">
+            <button class="btn btn-sm" onclick="document.getElementById('photoFile').click()">📁 사진 선택</button>
+            <button class="btn btn-sm btn-d" id="modalDelBtn" style="display:none" onclick="clearUserPhoto()">🗑 삭제</button>
+        </div>
+        <div class="modal-btns" style="margin-top:10px;">
+            <button class="btn btn-sm btn-g" id="modalSaveBtn" onclick="savePhotoData()">💾 저장</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== 설정 =====
+const STORE_KEY='nf_submit_v1';
+// n8n Webhook URL (설정하면 저장 시 자동 전송, 비워두면 localStorage만 사용)
+const WEBHOOK_URL='https://nfrnd.app.n8n.cloud/webhook/emp-submit';
+const ADMIN_URL='';    // 예: 'https://nfrnd.app.n8n.cloud/webhook/emp-admin'
+
+function getStore(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{};}catch(e){return {};}}
+function setStore(d){localStorage.setItem(STORE_KEY,JSON.stringify(d));}
+
+// n8n Webhook 전송 (백그라운드, 실패해도 무시)
+function sendToWebhook(type, records, submitter){
+    if(!WEBHOOK_URL) return;
+    try{
+        fetch(WEBHOOK_URL,{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({type, records, submitter, timestamp:new Date().toISOString()})
+        }).then(r=>r.json()).then(d=>{
+            if(d.success) console.log('[n8n] 전송 성공:', d.message);
+        }).catch(e=>console.warn('[n8n] 전송 실패 (로컬 저장은 완료):', e));
+    }catch(e){}
+}
+
+// ===== 직원 데이터 (ㄱㄴㄷ순) =====
+const EMP=[
+    {name:'권정아',division:'영업본부',team:'서비스운영2팀',position:'리드 매니저'},
+    {name:'권혜영',division:'브랜드마케팅팀',team:'브랜드마케팅팀',position:'리드 매니저'},
+    {name:'김경미',division:'영업본부',team:'서비스운영1팀',position:'매니저'},
+    {name:'김민지',division:'커머스사업본부',team:'브랜드커머스팀',position:'매니저'},
+    {name:'김범석',division:'경영관리본부',team:'그로스팀',position:'매니저'},
+    {name:'김성민',division:'영업본부',team:'서비스운영1팀',position:'매니저'},
+    {name:'김성준',division:'용인사업장',team:'용인공장',position:'공장장'},
+    {name:'김소라',division:'브랜드마케팅팀',team:'브랜드마케팅팀',position:'매니저'},
+    {name:'김소연',division:'커머스사업본부',team:'미디어커머스팀',position:'매니저'},
+    {name:'김소정',division:'용인사업장',team:'건설 기술연구소',position:'연구원'},
+    {name:'김송희',division:'커머스사업본부',team:'모여라딜팀',position:'리드 매니저'},
+    {name:'김수진',division:'영업본부',team:'서비스운영2팀',position:'매니저'},
+    {name:'김유림',division:'경영관리본부',team:'경영관리팀',position:'매니저'},
+    {name:'김유진',division:'용인사업장',team:'생산/품질관리팀',position:'매니저'},
+    {name:'김채원',division:'커머스사업본부',team:'해외사업팀',position:'매니저'},
+    {name:'남윤정',division:'커머스사업본부',team:'미디어커머스팀',position:'매니저'},
+    {name:'백정석',division:'경영관리본부',team:'경영관리본부',position:'이사'},
+    {name:'손예진',division:'브랜드마케팅팀',team:'브랜드마케팅팀',position:'매니저'},
+    {name:'송보람',division:'영업본부',team:'서비스운영3팀',position:'매니저'},
+    {name:'신나영',division:'경영관리본부',team:'경영관리팀',position:'리드 매니저'},
+    {name:'신명희',division:'용인사업장',team:'소재 기술연구소',position:'선임연구원'},
+    {name:'심혜진',division:'용인사업장',team:'건설 기술연구소',position:'연구원'},
+    {name:'이나라',division:'용인사업장',team:'관리팀',position:'매니저'},
+    {name:'이란',division:'커머스사업본부',team:'브랜드커머스팀',position:'매니저'},
+    {name:'이승우',division:'경영총괄',team:'경영총괄',position:'대표이사'},
+    {name:'이재민',division:'용인사업장',team:'생산/품질관리팀',position:'리드 매니저'},
+    {name:'이재훈',division:'경영관리본부',team:'그로스팀',position:'리드 매니저'},
+    {name:'이정훈',division:'용인사업장',team:'건설 기술연구소',position:'기술연구소장'},
+    {name:'이지연',division:'영업본부',team:'서비스운영2팀',position:'매니저'},
+    {name:'이채은',division:'커머스사업본부',team:'모여라딜팀',position:'매니저'},
+    {name:'이필선',division:'영업본부',team:'영업팀',position:'매니저'},
+    {name:'정영재',division:'용인사업장',team:'용인사업장',position:'부사장'},
+    {name:'정정훈',division:'영업본부',team:'서비스운영1팀',position:'매니저'},
+    {name:'정태윤',division:'영업본부',team:'설계/적산팀',position:'매니저'},
+    {name:'조재연',division:'영업본부',team:'서비스운영1팀',position:'매니저'},
+    {name:'주유진',division:'경영관리본부',team:'경영관리팀',position:'매니저'},
+    {name:'주현진',division:'영업본부',team:'서비스운영3팀',position:'리드 매니저'},
+    {name:'쩐티리',division:'커머스사업본부',team:'해외사업팀',position:'매니저'},
+    {name:'최경선',division:'브랜드마케팅팀',team:'브랜드마케팅팀',position:'매니저'},
+    {name:'최영옥',division:'경영관리본부',team:'경영관리팀',position:'매니저'},
+    {name:'한인규',division:'영업본부',team:'설계/적산팀',position:'리드 매니저'},
+    {name:'한준엽',division:'영업본부',team:'서비스운영1팀',position:'리드 매니저'},
+    {name:'함지민',division:'브랜드마케팅팀',team:'브랜드마케팅팀',position:'매니저'},
+    {name:'황윤선',division:'영업본부',team:'영업본부',position:'상무이사'},
+];
+
+// ===== 리드 설정 =====
+// 리드에서 제외할 사람 (임원 + 이정훈 연구소장)
+const EXCLUDE_LEAD=['이승우','황윤선','정영재','백정석','이정훈'];
+const LEAD_POS=['리드 매니저','공장장','선임연구원'];
+// 리드가 없는 팀 → 취합 담당자 수동 지정
+const TEAM_LEAD_OVERRIDE={
+    '해외사업팀':'김채원|해외사업팀',
+    '브랜드커머스팀':'이란|브랜드커머스팀',
+    '미디어커머스팀':'김소연|미디어커머스팀',
+    '영업팀':'이필선|영업팀',
+};
+const OVERRIDE_EXCLUDE=['이재훈|미디어커머스팀'];
+const FACTORY_MANAGED=['관리팀','생산/품질관리팀'];
+
+// 신명희(소재 기술연구소)가 건설 기술연구소 연구원(심혜진, 김소정)도 함께 입력
+const RESEARCH_EXTRA={'신명희|소재 기술연구소':['심혜진|건설 기술연구소','김소정|건설 기술연구소']};
+
+const leads=EMP.filter(e=>{
+    if(EXCLUDE_LEAD.includes(e.name)) return false;
+    if(FACTORY_MANAGED.includes(e.team)) return false;
+    if(OVERRIDE_EXCLUDE.includes(e.name+'|'+e.team)) return false;
+    if(LEAD_POS.includes(e.position)) return true;
+    const ov=TEAM_LEAD_OVERRIDE[e.team];
+    if(ov&&ov===e.name+'|'+e.team) return true;
+    return false;
+});
+
+// 탭 전환
+function switchTab(t){
+    document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('on',i===(t==='task'?0:1)));
+    document.getElementById('pTask').className='panel'+(t==='task'?' on':'');
+    document.getElementById('pPhoto').className='panel'+(t==='photo'?' on':'');
+    if(t==='photo') renderPhotoStat();
+}
+
+// ===== 모드1: 담당업무 =====
+function initLeadSel(){
+    const sel=document.getElementById('leadSel');
+    leads.forEach(l=>{
+        const o=document.createElement('option');
+        o.value=l.name+'|'+l.team;
+        const label=`${l.name} (${l.team} · ${l.position})`;
+        sel.appendChild(o);
+        o.textContent=label;
+    });
+}
+
+let curLead=null;
+let allMembers=[];
+function selectLead(){
+    const v=document.getElementById('leadSel').value;
+    if(!v){document.getElementById('teamArea').innerHTML='';document.getElementById('taskActions').style.display='none';document.getElementById('taskSaveStatus').style.display='none';curLead=null;return;}
+    const [name,team]=v.split('|');
+    curLead={name,team};
+    const lead=EMP.find(e=>e.name===name&&e.team===team)||EMP.find(e=>e.name===name);
+
+    const FACTORY_TEAMS=['용인공장','관리팀','생산/품질관리팀'];
+    let teamMembers;
+    if(lead.position==='공장장'){
+        teamMembers=EMP.filter(e=>FACTORY_TEAMS.includes(e.team)&&e.name!==name);
+    } else {
+        teamMembers=EMP.filter(e=>e.team===team&&e.name!==name);
+    }
+
+    // 신명희 선택 시 건설기술연구소 연구원도 포함
+    const extraKey=name+'|'+team;
+    if(RESEARCH_EXTRA[extraKey]){
+        RESEARCH_EXTRA[extraKey].forEach(key=>{
+            const [eName,eTeam]=key.split('|');
+            const emp=EMP.find(e=>e.name===eName&&e.team===eTeam);
+            if(emp&&!teamMembers.includes(emp)) teamMembers.push(emp);
+        });
+    }
+
+    allMembers=[lead,...teamMembers];
+    renderTeamMembers(allMembers);
+    document.getElementById('taskActions').style.display='flex';
+    document.getElementById('taskSaveStatus').style.display='none';
+}
+
+function renderTeamMembers(members){
+    const area=document.getElementById('teamArea');
+    if(!members.length){area.innerHTML='<div class="empty-msg">해당 팀원이 없습니다.</div>';return;}
+    const store=getStore();
+    area.innerHTML=members.map((m,i)=>{
+        const storeKey=m.name+'|'+m.team;
+        const saved=store['task_'+storeKey];
+        const tasks=saved||[];
+        const rows=Math.max(2,tasks.length);
+        const isLead=(i===0);
+        let inputs='';
+        for(let j=0;j<rows;j++){
+            inputs+=`<div class="task-row"><input class="task-input" data-member="${i}" placeholder="업무 ${j+1}" value="${tasks[j]||''}"><button class="btn-del-task" onclick="delRow(this)" title="삭제">&times;</button></div>`;
+        }
+        return `<div class="member${isLead?' is-lead':''}" data-idx="${i}">
+            <div class="member-head">
+                <div class="member-av">${m.name[0]}</div>
+                <div class="member-info"><div class="member-nm">${m.name}${isLead?' <span class="member-badge">본인</span>':''}</div><div class="member-pos">${m.position} · ${m.team}</div></div>
+            </div>
+            <div class="task-rows" id="taskRows${i}">${inputs}</div>
+            <button class="btn-add-task" onclick="addRow(${i})">+ 업무 추가</button>
+        </div>`;
+    }).join('');
+}
+
+function addRow(idx){
+    const rows=document.getElementById('taskRows'+idx);
+    const n=rows.querySelectorAll('.task-input').length+1;
+    const div=document.createElement('div');
+    div.className='task-row';
+    div.innerHTML=`<input class="task-input" data-member="${idx}" placeholder="업무 ${n}"><button class="btn-del-task" onclick="delRow(this)" title="삭제">&times;</button>`;
+    rows.appendChild(div);
+    div.querySelector('.task-input').focus();
+}
+
+function delRow(btn){
+    const row=btn.closest('.task-row');
+    const rows=row.parentElement;
+    if(rows.querySelectorAll('.task-row').length<=1){
+        row.querySelector('.task-input').value='';
+        return;
+    }
+    row.remove();
+    rows.querySelectorAll('.task-input').forEach((inp,j)=>{inp.placeholder='업무 '+(j+1);});
+}
+
+function saveTaskData(){
+    if(!allMembers||!allMembers.length){toast('팀원 데이터가 없습니다.','err');return;}
+    const store=getStore();
+    let count=0;
+    allMembers.forEach((m,i)=>{
+        const inputs=[...document.getElementById('taskRows'+i).querySelectorAll('.task-input')];
+        const tasks=inputs.map(inp=>inp.value.trim()).filter(Boolean);
+        if(tasks.length){
+            store['task_'+m.name+'|'+m.team]=tasks;
+            count++;
+        }
+    });
+    setStore(store);
+    // n8n Webhook 전송
+    const webhookRecords=allMembers.map((m,i)=>{
+        const inputs=[...document.getElementById('taskRows'+i).querySelectorAll('.task-input')];
+        const tasks=inputs.map(inp=>inp.value.trim()).filter(Boolean);
+        return {name:m.name,division:m.division,team:m.team,position:m.position,primaryTasks:tasks};
+    }).filter(d=>d.primaryTasks.length);
+    if(webhookRecords.length) sendToWebhook('task',webhookRecords,curLead.name);
+    const status=document.getElementById('taskSaveStatus');
+    status.textContent=`✅ ${count}명 담당업무 저장 완료 (${new Date().toLocaleTimeString()})`;
+    status.style.display='block';
+    document.getElementById('taskDlArea').style.display='block';
+    toast(`${count}명 담당업무 저장 완료!`,'ok');
+}
+
+// 현재 선택된 팀 담당업무 JSON 다운로드 (HTML 임포트용)
+function dlTaskJSON(){
+    if(!allMembers||!allMembers.length){toast('먼저 저장해주세요.','err');return;}
+    const result=allMembers.map((m,i)=>{
+        const inputs=[...document.getElementById('taskRows'+i).querySelectorAll('.task-input')];
+        const tasks=inputs.map(inp=>inp.value.trim()).filter(Boolean);
+        return {name:m.name,division:m.division,team:m.team,position:m.position,primaryTasks:tasks};
+    }).filter(d=>d.primaryTasks.length);
+    if(!result.length){toast('입력된 업무가 없습니다.','err');return;}
+    downloadJSON(result,`담당업무_${curLead.team}_${curLead.name}`);
+    toast('JSON 다운로드 완료! → 직원정보공유.html에서 "JSON 파일 병합"으로 임포트','ok');
+}
+
+// 현재 선택된 팀 담당업무 CSV 다운로드 (엑셀용)
+function dlTaskCSV(){
+    if(!allMembers||!allMembers.length){toast('먼저 저장해주세요.','err');return;}
+    const rows=[['이름','본부','팀','직급','주업무1','주업무2','업무3','업무4','업무5']];
+    allMembers.forEach((m,i)=>{
+        const inputs=[...document.getElementById('taskRows'+i).querySelectorAll('.task-input')];
+        const tasks=inputs.map(inp=>inp.value.trim()).filter(Boolean);
+        if(tasks.length){
+            const row=[m.name,m.division,m.team,m.position];
+            for(let j=0;j<5;j++) row.push(tasks[j]||'');
+            rows.push(row);
+        }
+    });
+    if(rows.length<=1){toast('입력된 업무가 없습니다.','err');return;}
+    downloadCSV(rows,`담당업무_${curLead.team}_${curLead.name}`);
+    toast('엑셀(CSV) 다운로드 완료!','ok');
+}
+
+// ===== 모드2: 사진 =====
+let photoTarget=null,photoData='';
+
+function getPhotoStats(){
+    const store=getStore();
+    let done=0;
+    EMP.forEach(e=>{if(store['photo_'+e.name+'|'+e.team]) done++;});
+    return {total:EMP.length, done, remain:EMP.length-done};
+}
+
+function renderPhotoStat(){
+    const s=getPhotoStats();
+    const pct=s.total?Math.round(s.done/s.total*100):0;
+    document.getElementById('photoStatArea').innerHTML=`
+        <div class="stat-bar">
+            <div class="stat-item stat-total">전체 <span class="stat-n">${s.total}</span>명</div>
+            <div class="stat-item stat-done">완료 <span class="stat-n">${s.done}</span>명</div>
+            <div class="stat-item stat-remain">미완료 <span class="stat-n">${s.remain}</span>명</div>
+        </div>
+        <div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div>`;
+}
+
+function initPhotoList(){renderPhotoStat();renderPhotoList('');}
+function filterPhotoList(){renderPhotoList(document.getElementById('photoSearch').value.trim());}
+
+function renderPhotoList(q){
+    const list=document.getElementById('photoList');
+    const filtered=q?EMP.filter(e=>e.name.includes(q)):EMP;
+    const store=getStore();
+    list.innerHTML=filtered.map(e=>{
+        const idx=EMP.indexOf(e);
+        const hasPhoto=store['photo_'+e.name+'|'+e.team];
+        return `<div class="person-item${hasPhoto?' on':''}" onclick="openPhotoModal(${idx})">
+        <div class="member-av" style="width:30px;height:30px;font-size:11px;">${e.name[0]}</div>
+        <div><div class="p-nm">${e.name}</div><div class="p-info">${e.team} · ${e.position}</div></div>
+        ${hasPhoto?'<span class="done-badge">✅ 등록완료</span>':'<span class="undone-badge">미등록</span>'}
+    </div>`;
+    }).join('');
+}
+
+function openPhotoModal(idx){
+    const e=EMP[idx];if(!e)return;
+    photoTarget=e;photoData='';
+    const store=getStore();
+    const saved=store['photo_'+e.name+'|'+e.team];
+    document.getElementById('modalName').textContent=e.name;
+    document.getElementById('modalSub').textContent=`${e.team} · ${e.position}`;
+    const preview=document.getElementById('modalPreview');
+    if(saved){
+        photoData=saved;
+        preview.innerHTML=`<img src="${saved}">`;
+        preview.classList.add('has-photo');
+        document.getElementById('modalDelBtn').style.display='inline-flex';
+    } else {
+        preview.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
+        preview.classList.remove('has-photo');
+        document.getElementById('modalDelBtn').style.display='none';
+    }
+    document.getElementById('photoFile').value='';
+    document.getElementById('photoModal').classList.add('show');
+}
+
+function closePhotoModal(){
+    document.getElementById('photoModal').classList.remove('show');
+    photoTarget=null;photoData='';
+}
+
+function handleUserPhoto(ev){
+    const file=ev.target.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=function(e){
+        const img=new Image();
+        img.onload=function(){
+            const max=300,c=document.createElement('canvas');
+            let w=img.width,h=img.height;
+            if(w>h){if(w>max){h=h*max/w;w=max;}}else{if(h>max){w=w*max/h;h=max;}}
+            c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+            photoData=c.toDataURL('image/jpeg',0.8);
+            const preview=document.getElementById('modalPreview');
+            preview.innerHTML=`<img src="${photoData}">`;
+            preview.classList.add('has-photo');
+            document.getElementById('modalDelBtn').style.display='inline-flex';
+        };
+        img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+function clearUserPhoto(){
+    photoData='';
+    document.getElementById('photoFile').value='';
+    const preview=document.getElementById('modalPreview');
+    preview.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
+    preview.classList.remove('has-photo');
+    document.getElementById('modalDelBtn').style.display='none';
+    if(photoTarget){
+        const store=getStore();
+        delete store['photo_'+photoTarget.name+'|'+photoTarget.team];
+        setStore(store);
+        renderPhotoStat();
+        renderPhotoList(document.getElementById('photoSearch').value.trim());
+        toast('사진 삭제 완료','ok');
+    }
+}
+
+function savePhotoData(){
+    if(!photoTarget){toast('선택된 사람이 없습니다.','err');return;}
+    if(!photoData){toast('사진을 업로드해주세요.','err');return;}
+    const store=getStore();
+    store['photo_'+photoTarget.name+'|'+photoTarget.team]=photoData;
+    setStore(store);
+    // n8n Webhook 전송
+    sendToWebhook('photo',[{name:photoTarget.name,division:photoTarget.division,team:photoTarget.team,position:photoTarget.position,photo:photoData}],photoTarget.name);
+    toast(`${photoTarget.name} 사진 저장 완료!`,'ok');
+    closePhotoModal();
+    renderPhotoStat();
+    renderPhotoList(document.getElementById('photoSearch').value.trim());
+}
+
+// ===== 관리자 도구 =====
+const ADMIN_PW='1212';
+function unlockAdmin(){
+    const inp=document.getElementById('adminPwInput');
+    const msg=document.getElementById('lockMsg');
+    if(inp.value===ADMIN_PW){
+        document.getElementById('adminLock').style.display='none';
+        document.getElementById('adminContent').style.display='block';
+        msg.textContent='';
+    }else{
+        msg.textContent='비밀번호가 틀렸습니다.';
+        inp.value='';
+        inp.focus();
+        setTimeout(()=>msg.textContent='',2000);
+    }
+}
+
+// 사진 JSON 다운로드 (HTML 임포트용)
+function downloadAllPhotos(){
+    const store=getStore();
+    const result=[];
+    EMP.forEach(e=>{
+        const photo=store['photo_'+e.name+'|'+e.team];
+        if(photo) result.push({name:e.name,division:e.division,team:e.team,position:e.position,photo});
+    });
+    if(!result.length){toast('등록된 사진이 없습니다.','err');return;}
+    downloadJSON(result,`사진_전체_${result.length}명`);
+    toast(`${result.length}명 사진 JSON → 직원정보공유.html에서 "JSON 파일 병합"으로 임포트`,'ok');
+}
+
+// 사진 제출현황 CSV
+function downloadPhotoStatus(){
+    const store=getStore();
+    const rows=[['이름','본부','팀','직급','사진 제출여부']];
+    EMP.forEach(e=>{
+        rows.push([e.name,e.division,e.team,e.position,store['photo_'+e.name+'|'+e.team]?'완료':'미제출']);
+    });
+    downloadCSV(rows,'사진_제출현황');
+    toast('사진 제출현황 CSV 다운로드 완료!','ok');
+}
+
+// 담당업무 전체 JSON (모든 팀 취합 — HTML 임포트용)
+function downloadAllTasksJSON(){
+    const store=getStore();
+    const result=[];
+    EMP.forEach(e=>{
+        const tasks=store['task_'+e.name+'|'+e.team];
+        if(tasks&&tasks.length) result.push({name:e.name,division:e.division,team:e.team,position:e.position,primaryTasks:tasks});
+    });
+    if(!result.length){toast('저장된 업무 데이터가 없습니다.','err');return;}
+    downloadJSON(result,`담당업무_전체_${result.length}명`);
+    toast(`${result.length}명 업무 JSON → 직원정보공유.html에서 "JSON 파일 병합"으로 임포트`,'ok');
+}
+
+// 담당업무 전체 CSV (엑셀용)
+function downloadAllTasksCSV(){
+    const store=getStore();
+    const rows=[['이름','본부','팀','직급','주업무1','주업무2','업무3','업무4','업무5','입력여부']];
+    EMP.forEach(e=>{
+        const tasks=store['task_'+e.name+'|'+e.team]||[];
+        const row=[e.name,e.division,e.team,e.position];
+        for(let j=0;j<5;j++) row.push(tasks[j]||'');
+        row.push(tasks.length?'완료':'미입력');
+        rows.push(row);
+    });
+    downloadCSV(rows,'담당업무_전체');
+    toast('담당업무 전체 CSV 다운로드 완료!','ok');
+}
+
+// 통합 JSON (업무 + 사진) — 직원정보공유.html mergeJSON 으로 바로 임포트
+function downloadAllMergedJSON(){
+    const store=getStore();
+    const result=[];
+    let taskCnt=0,photoCnt=0;
+    EMP.forEach(e=>{
+        const tasks=store['task_'+e.name+'|'+e.team];
+        const photo=store['photo_'+e.name+'|'+e.team];
+        if((tasks&&tasks.length)||photo){
+            const obj={name:e.name,division:e.division,team:e.team,position:e.position};
+            if(tasks&&tasks.length){obj.primaryTasks=tasks;taskCnt++;}
+            if(photo){obj.photo=photo;photoCnt++;}
+            result.push(obj);
+        }
+    });
+    if(!result.length){toast('저장된 데이터가 없습니다.','err');return;}
+    downloadJSON(result,`통합_업무${taskCnt}명_사진${photoCnt}명`);
+    toast(`통합 JSON(업무 ${taskCnt}명 + 사진 ${photoCnt}명) → 직원정보공유.html에서 "JSON 파일 병합"으로 임포트`,'ok');
+}
+
+// ===== n8n 서버 데이터 조회 =====
+function fetchN8nData(mode){
+    if(!ADMIN_URL){toast('ADMIN_URL이 설정되지 않았습니다.','err');return;}
+    const url=ADMIN_URL+(ADMIN_URL.includes('?')?'&':'?')+'mode='+mode;
+    fetch(url).then(r=>r.json()).then(data=>{
+        const el=document.getElementById('n8nResult');
+        if(mode==='status'){
+            el.innerHTML=`<div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px;font-size:13px;line-height:1.7;">
+                <b>☁️ 서버 취합 현황</b><br>
+                📋 담당업무 입력 완료: <b style="color:var(--accent);">${data.taskCount}명</b><br>
+                📷 사진 등록 완료: <b style="color:var(--green);">${data.photoCount}명</b><br>
+                📝 총 제출 횟수: ${data.totalSubmissions}회
+                ${data.taskNames&&data.taskNames.length?'<br><br><b>업무 입력 완료:</b><br><span style="font-size:12px;color:var(--sub);">'+data.taskNames.join(', ')+'</span>':''}
+                ${data.photoNames&&data.photoNames.length?'<br><br><b>사진 등록 완료:</b><br><span style="font-size:12px;color:var(--sub);">'+data.photoNames.join(', ')+'</span>':''}
+            </div>`;
+            toast('서버 현황 조회 완료!','ok');
+        } else {
+            // JSON 다운로드
+            const result=Array.isArray(data)?data:(data.result||[data]);
+            const prefix=mode==='all'?'서버_통합':mode==='tasks'?'서버_업무':'서버_사진';
+            downloadJSON(result,prefix+'_'+result.length+'건');
+            el.innerHTML=`<div style="font-size:12px;color:var(--green);font-weight:600;">✅ ${result.length}건 다운로드 완료</div>`;
+            toast(`서버 데이터 ${result.length}건 JSON 다운로드!`,'ok');
+        }
+    }).catch(e=>{
+        toast('서버 연결 실패: '+e.message,'err');
+    });
+}
+
+// ===== 모달 바깥 클릭 닫기 =====
+document.getElementById('photoModal').addEventListener('click',function(e){
+    if(e.target===this) closePhotoModal();
+});
+
+// ===== 공통 =====
+function downloadJSON(data,prefix){
+    const b=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(b);
+    a.download=prefix+'_'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+
+function downloadCSV(rows,prefix){
+    const BOM='\uFEFF';
+    const csv=rows.map(r=>r.map(c=>{
+        const s=String(c).replace(/"/g,'""');
+        return /[,"\n\r]/.test(s)?`"${s}"`:s;
+    }).join(',')).join('\r\n');
+    const b=new Blob([BOM+csv],{type:'text/csv;charset=utf-8'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(b);
+    a.download=prefix+'_'+new Date().toISOString().slice(0,10)+'.csv';
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+
+function toast(m,t){const el=document.getElementById('toast');el.textContent=m;el.className='toast '+(t==='ok'?'ok':t==='err'?'err':'');setTimeout(()=>el.classList.add('show'),10);setTimeout(()=>el.classList.remove('show'),2500);}
+
+// 초기화
+initLeadSel();
+initPhotoList();
+// n8n 연동 영역 표시
+if(ADMIN_URL){const el=document.getElementById('n8nAdminArea');if(el)el.style.display='block';}
+</script>
+</body>
+</html>
