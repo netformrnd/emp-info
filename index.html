@@ -308,7 +308,7 @@ function sendToWebhook(type, records, submitter){
     try{
         fetch(WEBHOOK_URL,{
             method:'POST',
-            headers:{'Content-Type':'text/plain'},
+            headers:{'Content-Type':'application/json'},
             body:JSON.stringify({type, records, submitter, timestamp:new Date().toISOString()})
         }).then(r=>{
             console.log('[n8n] 전송 완료');
