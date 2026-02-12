@@ -50,8 +50,15 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .info-box.warning{background:var(--orange-light);border-left:3px solid var(--orange);}
 .info-video-section{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:0 0 16px;}
 .info-video-label{font-size:14px;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.info-video{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.info-video{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer;position:relative;}
+.info-video:hover{border-color:var(--accent);box-shadow:0 2px 12px rgba(0,0,0,.12);}
 .info-video video{width:100%;display:block;}
+.info-video-hint{text-align:center;font-size:11px;color:var(--dim);margin-top:8px;}
+.video-modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:600;align-items:center;justify-content:center;cursor:pointer;}
+.video-modal-overlay.show{display:flex;}
+.video-modal-overlay video{max-width:92vw;max-height:88vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+.video-modal-close{position:fixed;top:16px;right:20px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:28px;cursor:pointer;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:601;transition:.15s;}
+.video-modal-close:hover{background:rgba(255,255,255,.3);}
 .info-preview{margin-top:16px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface-2);}
 .info-preview summary{padding:10px 14px;font-size:12px;font-weight:600;color:var(--sub);background:var(--surface-2);cursor:pointer;display:flex;align-items:center;gap:6px;list-style:none;user-select:none;}
 .info-preview summary::-webkit-details-marker{display:none;}
@@ -242,11 +249,12 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
             </div>
             <div class="info-video-section">
                 <div class="info-video-label">▶ 임직원 및 업무 검색 예시</div>
-                <div class="info-video">
+                <div class="info-video" onclick="openVideoModal()">
                     <video autoplay loop muted playsinline>
                         <source src="video.mp4" type="video/mp4">
                     </video>
                 </div>
+                <div class="info-video-hint">🔍 클릭하면 크게 볼 수 있습니다</div>
             </div>
             <div class="info-row">
                 <div class="info-num">2</div>
@@ -393,6 +401,14 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
             <button class="btn btn-sm btn-g" id="modalSaveBtn" onclick="savePhotoData()">💾 저장</button>
         </div>
     </div>
+</div>
+
+<!-- 비디오 확대 모달 -->
+<div class="video-modal-overlay" id="videoModal" onclick="closeVideoModal()">
+    <button class="video-modal-close" onclick="closeVideoModal()">&times;</button>
+    <video id="videoModalPlayer" autoplay loop muted playsinline>
+        <source src="video.mp4" type="video/mp4">
+    </video>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -967,6 +983,23 @@ function downloadCSV(rows,prefix){
     a.href=URL.createObjectURL(b);
     a.download=prefix+'_'+new Date().toISOString().slice(0,10)+'.csv';
     document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+
+// ===== 비디오 확대 모달 =====
+function openVideoModal(){
+    const modal=document.getElementById('videoModal');
+    const player=document.getElementById('videoModalPlayer');
+    modal.classList.add('show');
+    player.currentTime=0;
+    player.play();
+    document.body.style.overflow='hidden';
+}
+function closeVideoModal(){
+    const modal=document.getElementById('videoModal');
+    const player=document.getElementById('videoModalPlayer');
+    modal.classList.remove('show');
+    player.pause();
+    document.body.style.overflow='';
 }
 
 function toast(m,t){const el=document.getElementById('toast');el.textContent=m;el.className='toast '+(t==='ok'?'ok':t==='err'?'err':'');setTimeout(()=>el.classList.add('show'),10);setTimeout(()=>el.classList.remove('show'),2500);}
