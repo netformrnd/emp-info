@@ -673,8 +673,8 @@ function renderTeamMembers(members){
     area.innerHTML=members.map((m,i)=>{
         const storeKey=m.name+'|'+m.team;
         const saved=store['task_'+storeKey];
-        // localStorage 우선, 없으면 서버 데이터 사용
-        const tasks=saved||(serverStatus.taskDetails[m.name])||[];
+        // 서버 로드 완료 시 서버 데이터 우선, 미로드 시 로컬 사용
+        const tasks=serverStatus.loaded?(serverStatus.taskDetails[m.name]||[]):(saved||[]);
         const isLead=(i===0);
         // 주업무 2개 (고정)
         let primaryInputs='';
@@ -802,6 +802,8 @@ function fetchServerStatus(){
             taskDetails:data.taskDetails||{},
             loaded:true
         };
+        // 서버 기준으로 localStorage 동기화 (서버에 없는 데이터 정리)
+        syncLocalWithServer();
         // 사진 탭이 열려있으면 현황 갱신
         renderPhotoStat();
         renderPhotoList(document.getElementById('photoSearch')?.value.trim()||'');
@@ -814,25 +816,66 @@ function fetchServerStatus(){
     });
 }
 
-function getPhotoStats(){
-    // 서버 데이터 + 로컬 데이터 병합
+// 서버 기준으로 localStorage 동기화
+function syncLocalWithServer(){
     const store=getStore();
+    let changed=false;
+    const serverTaskSet=new Set(serverStatus.taskNames);
+    const serverPhotoSet=new Set(serverStatus.photoNames);
+    // 서버에 없는 업무 데이터 → localStorage에서 제거
+    Object.keys(store).forEach(key=>{
+        if(key.startsWith('task_')){
+            const name=key.replace('task_','').split('|')[0];
+            if(!serverTaskSet.has(name)){
+                delete store[key];
+                changed=true;
+            }
+        }
+        if(key.startsWith('photo_')){
+            const name=key.replace('photo_','').split('|')[0];
+            if(!serverPhotoSet.has(name)){
+                delete store[key];
+                changed=true;
+            }
+        }
+    });
+    // 서버에 있는 업무 데이터 → localStorage에 반영 (서버 기준 덮어쓰기)
+    for(const [name, tasks] of Object.entries(serverStatus.taskDetails)){
+        const emp=EMP.find(e=>e.name===name);
+        if(emp){
+            store['task_'+name+'|'+emp.team]=tasks;
+            changed=true;
+        }
+    }
+    if(changed) setStore(store);
+}
+
+function getPhotoStats(){
     const doneSet=new Set();
-    // 서버에서 사진 등록된 이름
-    serverStatus.photoNames.forEach(n=>doneSet.add(n));
-    // 로컬에서 사진 등록된 이름
-    EMP.forEach(e=>{if(store['photo_'+e.name+'|'+e.team]) doneSet.add(e.name);});
+    if(serverStatus.loaded){
+        // 서버 로드 완료 → 서버 데이터가 유일한 기준
+        serverStatus.photoNames.forEach(n=>doneSet.add(n));
+    } else {
+        // 서버 미로드 → 로컬 데이터로 임시 표시
+        const store=getStore();
+        EMP.forEach(e=>{if(store['photo_'+e.name+'|'+e.team]) doneSet.add(e.name);});
+    }
     const done=doneSet.size;
     return {total:EMP.length, done, remain:EMP.length-done, doneNames:doneSet};
 }
 
 function getTaskStats(){
-    const store=getStore();
     const taskTarget=EMP.filter(e=>!EXCLUDE_LEAD.includes(e.name));
     const total=taskTarget.length;
     const doneSet=new Set();
-    serverStatus.taskNames.forEach(n=>{if(!EXCLUDE_LEAD.includes(n)) doneSet.add(n);});
-    taskTarget.forEach(e=>{const tasks=store['task_'+e.name+'|'+e.team];if(tasks&&tasks.some(Boolean)) doneSet.add(e.name);});
+    if(serverStatus.loaded){
+        // 서버 로드 완료 → 서버 데이터가 유일한 기준
+        serverStatus.taskNames.forEach(n=>{if(!EXCLUDE_LEAD.includes(n)) doneSet.add(n);});
+    } else {
+        // 서버 미로드 → 로컬 데이터로 임시 표시
+        const store=getStore();
+        taskTarget.forEach(e=>{const tasks=store['task_'+e.name+'|'+e.team];if(tasks&&tasks.some(Boolean)) doneSet.add(e.name);});
+    }
     return {total, done:doneSet.size, remain:total-doneSet.size, doneNames:doneSet};
 }
 
@@ -877,11 +920,15 @@ function renderPhotoList(q){
     list.innerHTML=filtered.map(e=>{
         const idx=EMP.indexOf(e);
         const localPhoto=store['photo_'+e.name+'|'+e.team];
-        const serverPhoto=photoStats.doneNames.has(e.name);
-        const hasPhoto=localPhoto||serverPhoto;
-        const badge=hasPhoto
-            ?(localPhoto?'<span class="done-badge">✅ 등록완료</span>':'<span class="done-badge" style="background:#eff6ff;color:var(--accent-blue);">☁️ 서버등록</span>')
-            :'<span class="undone-badge">미등록</span>';
+        const serverDone=serverStatus.loaded&&photoStats.doneNames.has(e.name);
+        // 서버 로드 완료 → 서버 기준, 미로드 → 로컬 기준
+        const hasPhoto=serverStatus.loaded?serverDone:(!!localPhoto);
+        let badge;
+        if(hasPhoto){
+            badge=serverDone?'<span class="done-badge">✅ 등록완료</span>':'<span class="done-badge">✅ 등록완료</span>';
+        } else {
+            badge='<span class="undone-badge">미등록</span>';
+        }
         return `<div class="person-item${hasPhoto?' on':''}" onclick="openPhotoModal(${idx})">
         <div class="p-av">${e.name[0]}</div>
         <div><div class="p-nm">${e.name}</div><div class="p-info">${e.team} · ${e.position}</div></div>
