@@ -555,7 +555,15 @@ function selectLead(){
     }
 
     allMembers=[lead,...teamMembers];
-    renderTeamMembers(allMembers);
+    // 서버 데이터가 로드 안됐으면 먼저 불러온 후 렌더링
+    if(!serverStatus.loaded&&STATUS_URL){
+        fetch(STATUS_URL).then(r=>r.json()).then(data=>{
+            serverStatus={taskNames:data.taskNames||[],photoNames:data.photoNames||[],taskCount:data.taskCount||0,photoCount:data.photoCount||0,taskDetails:data.taskDetails||{},loaded:true};
+            renderTeamMembers(allMembers);
+        }).catch(()=>renderTeamMembers(allMembers));
+    } else {
+        renderTeamMembers(allMembers);
+    }
     document.getElementById('taskActions').style.display='flex';
     document.getElementById('taskSaveStatus').style.display='none';
 }
@@ -567,7 +575,8 @@ function renderTeamMembers(members){
     area.innerHTML=members.map((m,i)=>{
         const storeKey=m.name+'|'+m.team;
         const saved=store['task_'+storeKey];
-        const tasks=saved||[];
+        // localStorage 우선, 없으면 서버 데이터 사용
+        const tasks=saved||(serverStatus.taskDetails[m.name])||[];
         const isLead=(i===0);
         // 주업무 2개 (고정)
         let primaryInputs='';
@@ -682,7 +691,7 @@ function dlTaskCSV(){
 let photoTarget=null,photoData='';
 
 // 서버 현황 데이터
-let serverStatus={taskNames:[],photoNames:[],taskCount:0,photoCount:0,loaded:false};
+let serverStatus={taskNames:[],photoNames:[],taskCount:0,photoCount:0,taskDetails:{},loaded:false};
 
 function fetchServerStatus(){
     if(!STATUS_URL) return;
@@ -692,6 +701,7 @@ function fetchServerStatus(){
             photoNames:data.photoNames||[],
             taskCount:data.taskCount||0,
             photoCount:data.photoCount||0,
+            taskDetails:data.taskDetails||{},
             loaded:true
         };
         // 사진 탭이 열려있으면 현황 갱신
@@ -720,10 +730,12 @@ function getPhotoStats(){
 
 function getTaskStats(){
     const store=getStore();
+    const taskTarget=EMP.filter(e=>!EXCLUDE_LEAD.includes(e.name));
+    const total=taskTarget.length;
     const doneSet=new Set();
-    serverStatus.taskNames.forEach(n=>doneSet.add(n));
-    EMP.forEach(e=>{const tasks=store['task_'+e.name+'|'+e.team];if(tasks&&tasks.some(Boolean)) doneSet.add(e.name);});
-    return {total:EMP.length, done:doneSet.size, remain:EMP.length-doneSet.size, doneNames:doneSet};
+    serverStatus.taskNames.forEach(n=>{if(!EXCLUDE_LEAD.includes(n)) doneSet.add(n);});
+    taskTarget.forEach(e=>{const tasks=store['task_'+e.name+'|'+e.team];if(tasks&&tasks.some(Boolean)) doneSet.add(e.name);});
+    return {total, done:doneSet.size, remain:total-doneSet.size, doneNames:doneSet};
 }
 
 function renderPhotoStat(){
