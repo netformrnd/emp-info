@@ -8,32 +8,32 @@
 <style>
 :root{--bg:#f5f5f5;--surface:#ffffff;--surface-2:#fafafa;--border:#e5e5e5;--accent:#0f172a;--accent-blue:#1d4ed8;--accent-light:#eff6ff;--text:#171717;--sub:#737373;--dim:#a3a3a3;--green:#15803d;--green-light:#f0fdf4;--orange:#c2410c;--orange-light:#fff7ed;--red:#b91c1c;--radius:8px;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI','Malgun Gothic',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased;}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Segoe UI','Malgun Gothic',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:15.5px;-webkit-font-smoothing:antialiased;}
 
 /* ===== 헤더 ===== */
 .header{background:var(--accent);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .header-logo{display:flex;align-items:center;gap:12px;}
 .logo-divider{width:1px;height:20px;background:rgba(255,255,255,.2);}
-.logo-company{font-size:14px;font-weight:700;color:#fff;letter-spacing:.5px;}
-.logo-page{font-size:13px;color:rgba(255,255,255,.6);font-weight:400;}
-.header-deadline{color:rgba(255,255,255,.8);font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px;}
+.logo-company{font-size:15px;font-weight:700;color:#fff;letter-spacing:.5px;}
+.logo-page{font-size:14px;color:rgba(255,255,255,.6);font-weight:400;}
+.header-deadline{color:rgba(255,255,255,.8);font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;}
 .header-deadline .dot{width:6px;height:6px;border-radius:50%;background:#f59e0b;animation:pulse 2s ease infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-.wrap{max-width:800px;margin:0 auto;padding:0 20px;}
+.wrap{max-width:840px;margin:0 auto;padding:0 22px;}
 
 /* ===== 서브 헤더 ===== */
 .sub-header{background:var(--surface);border-bottom:1px solid var(--border);padding:24px 20px;margin:0 -20px;}
-.sub-header h1{font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
-.sub-header p{font-size:14px;color:var(--sub);line-height:1.6;}
+.sub-header h1{font-size:22px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
+.sub-header p{font-size:15px;color:var(--sub);line-height:1.6;}
 .sub-header-meta{display:flex;gap:20px;margin-top:14px;flex-wrap:wrap;}
-.meta-item{font-size:12px;color:var(--sub);display:flex;align-items:center;gap:4px;}
+.meta-item{font-size:13px;color:var(--sub);display:flex;align-items:center;gap:4px;}
 .meta-item b{color:var(--text);}
 .meta-item .tag{padding:2px 8px;background:var(--accent);color:#fff;border-radius:4px;font-weight:700;font-size:11px;}
 
 /* ===== 안내 섹션 ===== */
 .info-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin:24px 0;overflow:hidden;}
-.info-header{padding:14px 20px;background:var(--surface-2);border-bottom:1px solid var(--border);font-size:13px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;list-style:none;}
+.info-header{padding:16px 20px;background:var(--surface-2);border-bottom:1px solid var(--border);font-size:14px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;list-style:none;}
 .info-header::-webkit-details-marker{display:none;}
 .info-header::after{content:'▾';font-size:11px;transition:.2s;}
 .info-section[open] .info-header::after{transform:rotate(180deg);}
@@ -42,12 +42,16 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .info-row:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
 .info-num{width:28px;height:28px;background:var(--accent);color:#fff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:2px;}
 .info-text{flex:1;}
-.info-title{font-size:14px;font-weight:700;margin-bottom:4px;}
-.info-desc{font-size:13px;color:var(--sub);line-height:1.7;}
+.info-title{font-size:15px;font-weight:700;margin-bottom:6px;}
+.info-desc{font-size:14px;color:var(--sub);line-height:1.7;}
 .info-desc b{color:var(--text);}
-.info-box{margin-top:10px;padding:12px 16px;border-radius:6px;font-size:13px;line-height:1.7;}
+.info-box{margin-top:10px;padding:14px 18px;border-radius:6px;font-size:14px;line-height:1.7;}
 .info-box.example{background:var(--accent-light);border-left:3px solid var(--accent-blue);}
 .info-box.warning{background:var(--orange-light);border-left:3px solid var(--orange);}
+.info-video-section{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin:0 0 16px;}
+.info-video-label{font-size:14px;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.info-video{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.info-video video{width:100%;display:block;}
 .info-preview{margin-top:16px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface-2);}
 .info-preview summary{padding:10px 14px;font-size:12px;font-weight:600;color:var(--sub);background:var(--surface-2);cursor:pointer;display:flex;align-items:center;gap:6px;list-style:none;user-select:none;}
 .info-preview summary::-webkit-details-marker{display:none;}
@@ -62,7 +66,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 
 /* ===== 탭 ===== */
 .tabs{display:flex;border-bottom:2px solid var(--border);margin:24px 0 0;gap:0;}
-.tab{padding:14px 24px;font-size:14px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--sub);border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s;display:flex;align-items:center;gap:8px;font-family:inherit;}
+.tab{padding:16px 24px;font-size:15px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--sub);border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s;display:flex;align-items:center;gap:8px;font-family:inherit;}
 .tab:hover{color:var(--text);}
 .tab.on{color:var(--accent);border-bottom-color:var(--accent);}
 
@@ -88,8 +92,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .member-av{width:36px;height:36px;border-radius:6px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
 .member.is-lead .member-av{background:rgba(255,255,255,.2);}
 .member-info{flex:1;}
-.member-nm{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;}
-.member-pos{font-size:12px;color:var(--sub);margin-top:1px;}
+.member-nm{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.member-pos{font-size:13px;color:var(--sub);margin-top:1px;}
 .member.is-lead .member-pos{color:rgba(255,255,255,.7);}
 .member-badge{font-size:10px;font-weight:700;color:var(--accent);background:rgba(255,255,255,.9);padding:2px 8px;border-radius:4px;}
 .member-body{padding:14px 16px;}
@@ -100,7 +104,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .tsl-badge.secondary{background:var(--sub);}
 .task-rows{display:flex;flex-direction:column;gap:6px;}
 .task-row{display:flex;align-items:center;gap:6px;}
-.task-input{padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;outline:none;flex:1;transition:.15s;font-family:inherit;}
+.task-input{padding:10px 13px;border:1px solid var(--border);border-radius:6px;font-size:13.5px;outline:none;flex:1;transition:.15s;font-family:inherit;}
 .task-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(15,23,42,.06);}
 .task-input.primary-task{border-left:3px solid var(--accent);}
 .btn-del-task{width:26px;height:26px;border:1px solid var(--border);background:var(--surface);color:var(--dim);font-size:14px;cursor:pointer;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.12s;}
@@ -206,7 +210,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 <div class="wrap">
     <div class="sub-header">
         <h1>📢 임직원 업무·프로필 등록 요청</h1>
-        <p>임직원 정보 시스템 구축을 위해 정보 등록을 요청드립니다.</p>
+        <p>임직원 정보 시스템 구축을 위해 담당업무 및 증명사진 등록을 요청드립니다.</p>
         <div class="sub-header-meta">
             <div class="meta-item">담당: <b>경영관리팀 김유림</b></div>
             <div class="meta-item">마감: <span class="tag">2025.02.19</span></div>
@@ -234,6 +238,14 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
                         📌 <b>주업무 2개</b>는 필수 입력입니다. 가장 중요한 업무를 기입해 주세요.<br>
                         · <b>기타업무</b>는 선택사항이며, <b>"+ 기타업무 추가"</b> 버튼으로 자유롭게 추가할 수 있습니다.
                     </div>
+                </div>
+            </div>
+            <div class="info-video-section">
+                <div class="info-video-label">▶ 임직원 및 업무 검색 예시</div>
+                <div class="info-video">
+                    <video autoplay loop muted playsinline>
+                        <source src="video.mp4" type="video/mp4">
+                    </video>
                 </div>
             </div>
             <div class="info-row">
@@ -268,6 +280,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
     <div class="tab-content">
         <!-- 모드1: 담당업무 -->
         <div class="panel on" id="pTask">
+            <div id="taskStatArea" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;"></div>
             <div class="card">
                 <div class="card-header">
                     <div class="card-icon">👤</div>
@@ -388,6 +401,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 // ===== 설정 =====
 const STORE_KEY='nf_submit_v1';
 const WEBHOOK_URL='https://nfrnd.app.n8n.cloud/webhook/emp-submit';
+const STATUS_URL='https://nfrnd.app.n8n.cloud/webhook/emp-status';
 const ADMIN_URL='';
 
 function getStore(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{};}catch(e){return {};}}
@@ -484,6 +498,7 @@ function switchTab(t){
     document.getElementById('pTask').className='panel'+(t==='task'?' on':'');
     document.getElementById('pPhoto').className='panel'+(t==='photo'?' on':'');
     if(t==='photo') renderPhotoStat();
+    if(t==='task') renderTaskStat();
 }
 
 // ===== 모드1: 담당업무 =====
@@ -611,6 +626,9 @@ function saveTaskData(){
     status.style.display='block';
     document.getElementById('taskDlArea').style.display='block';
     toast(`${count}명 담당업무 저장 완료!`,'ok');
+    renderTaskStat();
+    // 3초 후 서버 현황 갱신 (서버 반영 시간 고려)
+    setTimeout(fetchServerStatus, 3000);
 }
 
 function dlTaskJSON(){
@@ -647,17 +665,73 @@ function dlTaskCSV(){
 // ===== 모드2: 사진 =====
 let photoTarget=null,photoData='';
 
+// 서버 현황 데이터
+let serverStatus={taskNames:[],photoNames:[],taskCount:0,photoCount:0,loaded:false};
+
+function fetchServerStatus(){
+    if(!STATUS_URL) return;
+    fetch(STATUS_URL).then(r=>r.json()).then(data=>{
+        serverStatus={
+            taskNames:data.taskNames||[],
+            photoNames:data.photoNames||[],
+            taskCount:data.taskCount||0,
+            photoCount:data.photoCount||0,
+            loaded:true
+        };
+        // 사진 탭이 열려있으면 현황 갱신
+        renderPhotoStat();
+        renderPhotoList(document.getElementById('photoSearch')?.value.trim()||'');
+        // 업무 탭 현황도 갱신
+        renderTaskStat();
+        console.log('[서버] 현황 조회 완료 - 업무:'+serverStatus.taskCount+'명, 사진:'+serverStatus.photoCount+'명');
+    }).catch(e=>{
+        console.warn('[서버] 현황 조회 실패:', e);
+        serverStatus.loaded=false;
+    });
+}
+
 function getPhotoStats(){
+    // 서버 데이터 + 로컬 데이터 병합
     const store=getStore();
-    let done=0;
-    EMP.forEach(e=>{if(store['photo_'+e.name+'|'+e.team]) done++;});
-    return {total:EMP.length, done, remain:EMP.length-done};
+    const doneSet=new Set();
+    // 서버에서 사진 등록된 이름
+    serverStatus.photoNames.forEach(n=>doneSet.add(n));
+    // 로컬에서 사진 등록된 이름
+    EMP.forEach(e=>{if(store['photo_'+e.name+'|'+e.team]) doneSet.add(e.name);});
+    const done=doneSet.size;
+    return {total:EMP.length, done, remain:EMP.length-done, doneNames:doneSet};
+}
+
+function getTaskStats(){
+    const store=getStore();
+    const doneSet=new Set();
+    serverStatus.taskNames.forEach(n=>doneSet.add(n));
+    EMP.forEach(e=>{const tasks=store['task_'+e.name+'|'+e.team];if(tasks&&tasks.some(Boolean)) doneSet.add(e.name);});
+    return {total:EMP.length, done:doneSet.size, remain:EMP.length-doneSet.size, doneNames:doneSet};
 }
 
 function renderPhotoStat(){
     const s=getPhotoStats();
     const pct=s.total?Math.round(s.done/s.total*100):0;
+    const statusTag=serverStatus.loaded?'<span style="font-size:10px;color:var(--green);font-weight:600;margin-left:8px;">● 서버 연동</span>':'';
     document.getElementById('photoStatArea').innerHTML=`
+        <div style="font-size:11px;color:var(--sub);margin-bottom:8px;font-weight:600;">📷 사진 제출 현황${statusTag}</div>
+        <div class="stat-bar">
+            <div class="stat-item stat-total"><div class="stat-label">전체</div><span class="stat-n">${s.total}</span></div>
+            <div class="stat-item stat-done"><div class="stat-label">완료</div><span class="stat-n">${s.done}</span></div>
+            <div class="stat-item stat-remain"><div class="stat-label">미완료</div><span class="stat-n">${s.remain}</span></div>
+        </div>
+        <div class="progress-wrap"><div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div><span class="progress-pct">${pct}%</span></div>`;
+}
+
+function renderTaskStat(){
+    const el=document.getElementById('taskStatArea');
+    if(!el) return;
+    const s=getTaskStats();
+    const pct=s.total?Math.round(s.done/s.total*100):0;
+    const statusTag=serverStatus.loaded?'<span style="font-size:10px;color:var(--green);font-weight:600;margin-left:8px;">● 서버 연동</span>':'';
+    el.innerHTML=`
+        <div style="font-size:11px;color:var(--sub);margin-bottom:8px;font-weight:600;">📋 업무 제출 현황${statusTag}</div>
         <div class="stat-bar">
             <div class="stat-item stat-total"><div class="stat-label">전체</div><span class="stat-n">${s.total}</span></div>
             <div class="stat-item stat-done"><div class="stat-label">완료</div><span class="stat-n">${s.done}</span></div>
@@ -673,13 +747,19 @@ function renderPhotoList(q){
     const list=document.getElementById('photoList');
     const filtered=q?EMP.filter(e=>e.name.includes(q)):EMP;
     const store=getStore();
+    const photoStats=getPhotoStats();
     list.innerHTML=filtered.map(e=>{
         const idx=EMP.indexOf(e);
-        const hasPhoto=store['photo_'+e.name+'|'+e.team];
+        const localPhoto=store['photo_'+e.name+'|'+e.team];
+        const serverPhoto=photoStats.doneNames.has(e.name);
+        const hasPhoto=localPhoto||serverPhoto;
+        const badge=hasPhoto
+            ?(localPhoto?'<span class="done-badge">✅ 등록완료</span>':'<span class="done-badge" style="background:#eff6ff;color:var(--accent-blue);">☁️ 서버등록</span>')
+            :'<span class="undone-badge">미등록</span>';
         return `<div class="person-item${hasPhoto?' on':''}" onclick="openPhotoModal(${idx})">
         <div class="p-av">${e.name[0]}</div>
         <div><div class="p-nm">${e.name}</div><div class="p-info">${e.team} · ${e.position}</div></div>
-        ${hasPhoto?'<span class="done-badge">✅ 등록완료</span>':'<span class="undone-badge">미등록</span>'}
+        ${badge}
     </div>`;
     }).join('');
 }
@@ -760,6 +840,7 @@ function savePhotoData(){
     closePhotoModal();
     renderPhotoStat();
     renderPhotoList(document.getElementById('photoSearch').value.trim());
+    setTimeout(fetchServerStatus, 3000);
 }
 
 // ===== 관리자 도구 =====
@@ -893,6 +974,7 @@ function toast(m,t){const el=document.getElementById('toast');el.textContent=m;e
 // 초기화
 initLeadSel();
 initPhotoList();
+fetchServerStatus(); // 서버 현황 조회
 if(ADMIN_URL){const el=document.getElementById('n8nAdminArea');if(el)el.style.display='block';}
 </script>
 </body>
