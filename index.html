@@ -596,10 +596,8 @@ function saveTaskData(){
         const pri=[...document.getElementById('primaryRows'+i).querySelectorAll('.task-input')].map(inp=>inp.value.trim());
         const sec=[...document.getElementById('secRows'+i).querySelectorAll('.task-input')].map(inp=>inp.value.trim()).filter(Boolean);
         const tasks=[...pri,...sec];
-        if(tasks.some(Boolean)){
-            store['task_'+m.name+'|'+m.team]=tasks;
-            count++;
-        }
+        store['task_'+m.name+'|'+m.team]=tasks;
+        count++;
     });
     setStore(store);
     const webhookRecords=allMembers.map((m,i)=>{
