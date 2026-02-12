@@ -53,7 +53,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
 .info-video{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.06);cursor:pointer;position:relative;}
 .info-video:hover{border-color:var(--accent);box-shadow:0 2px 12px rgba(0,0,0,.12);}
 .info-video video{width:100%;display:block;}
-.info-video-hint{text-align:center;font-size:11px;color:var(--dim);margin-top:8px;}
+.info-video-hint{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:12px;color:#fff;background:rgba(0,0,0,.55);padding:8px 0;opacity:0;transition:opacity .25s;pointer-events:none;}
+.info-video:hover .info-video-hint{opacity:1;}
 .video-modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:600;align-items:center;justify-content:center;cursor:pointer;}
 .video-modal-overlay.show{display:flex;}
 .video-modal-overlay video{max-width:92vw;max-height:88vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5);}
@@ -253,8 +254,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFo
                     <video autoplay loop muted playsinline>
                         <source src="video.mp4" type="video/mp4">
                     </video>
+                    <div class="info-video-hint">🔍 클릭하면 크게 볼 수 있습니다</div>
                 </div>
-                <div class="info-video-hint">🔍 클릭하면 크게 볼 수 있습니다</div>
             </div>
             <div class="info-row">
                 <div class="info-num">2</div>
